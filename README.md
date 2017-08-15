@@ -1,5 +1,5 @@
 ## 摘要
-分析验证码素材图片混淆原理，采用selenium模拟人拖动滑块过程，进而破解验证码。
+分析验证码素材图片混淆原理，并采用selenium模拟人拖动滑块过程，进而破解验证码。
 ## 人工验证的过程
 1. 打开威锋网注册页面（https://passport.feng.com/?r=user/register）
 2. 移动鼠标至小滑块，一张完整的图片会出现（如下图1）<br>
@@ -111,7 +111,7 @@
 5. 完整代码如下
     ``` 
     package com.github.wycm;
-    
+
     import org.apache.commons.io.FileUtils;
     import org.jsoup.Jsoup;
     import org.jsoup.nodes.Document;
@@ -125,7 +125,7 @@
     import org.openqa.selenium.interactions.Actions;
     import org.openqa.selenium.support.ui.ExpectedCondition;
     import org.openqa.selenium.support.ui.WebDriverWait;
-    
+
     import javax.imageio.ImageIO;
     import javax.imageio.ImageReadParam;
     import javax.imageio.ImageReader;
@@ -140,7 +140,7 @@
     import java.util.Random;
     import java.util.regex.Matcher;
     import java.util.regex.Pattern;
-    
+
     public class GeettestCrawler {
         private static String basePath = "src/main/resources/";
         private static String FULL_IMAGE_NAME = "full-image";
@@ -149,15 +149,15 @@
         private static boolean moveArrayInit = false;
         private static String INDEX_URL = "https://passport.feng.com/?r=user/register";
         private static WebDriver driver;
-    
+
         static {
-            System.setProperty("webdriver.chrome.driver", "/Users/wangyang/workspace/selenium/chromedriver_V2.30/chromedriver");
-            if (System.getProperty("os.name").toLowerCase().contains("windows")){
-                System.setProperty("webdriver.chrome.driver", "D:\\dev\\selenium\\chromedriver_V2.30\\chromedriver_win32\\chromedriver.exe");
+            System.setProperty("webdriver.chrome.driver", "D:/dev/selenium/chromedriver_V2.30/chromedriver_win32/chromedriver.exe");
+            if (!System.getProperty("os.name").toLowerCase().contains("windows")){
+                System.setProperty("webdriver.chrome.driver", "/Users/wangyang/workspace/selenium/chromedriver_V2.30/chromedriver");
             }
             driver = new ChromeDriver();
         }
-    
+
         public static void main(String[] args) throws InterruptedException {
             for (int i = 0; i < 10; i++){
                 try {
@@ -173,7 +173,7 @@
         private static void invoke() throws IOException, InterruptedException {
             //设置input参数
             driver.get(INDEX_URL);
-    
+
             //通过[class=gt_slider_knob gt_show]
             By moveBtn = By.cssSelector(".gt_slider_knob.gt_show");
             waitForLoad(driver, moveBtn);
@@ -201,7 +201,7 @@
                 Thread.sleep(4000);
             }
         }
-    
+
         /**
          * 移动
          * @param driver
@@ -230,7 +230,7 @@
     //            printLocation(element);
                 Thread.sleep(new Random().nextInt(100) + 150);
             }
-    
+
             System.out.println(xDis + "--" + 1);
             actions.moveByOffset(xDis, 1).perform();
             printLocation(element);
@@ -257,7 +257,7 @@
                 }
             });
         }
-    
+
         /**
          * 计算需要平移的距离
          * @param driver
@@ -281,7 +281,7 @@
                     fullRgb[0] = (fullBI.getRGB(i, j)  & 0xff0000) >> 16;
                     fullRgb[1] = (fullBI.getRGB(i, j)  & 0xff00) >> 8;
                     fullRgb[2] = (fullBI.getRGB(i, j)  & 0xff);
-    
+
                     int[] bgRgb = new int[3];
                     bgRgb[0] = (bgBI.getRGB(i, j)  & 0xff0000) >> 16;
                     bgRgb[1] = (bgBI.getRGB(i, j)  & 0xff00) >> 8;
@@ -487,7 +487,7 @@
                 }
                 //输出想要的图片
                 ImageIO.write(ImageNew, targetFile.split("\\.")[1], new File(targetFile));
-    
+
             } catch (Exception e) {
                 throw new RuntimeException(e);
             }
@@ -495,22 +495,22 @@
     }
 
     ```
- 6. pom文件依赖如下
- ``` 
-    <dependency>
-      <groupId>org.seleniumhq.selenium</groupId>
-      <artifactId>selenium-server</artifactId>
-      <version>3.0.1</version>
-    </dependency>
-    <!-- https://mvnrepository.com/artifact/org.jsoup/jsoup -->
-    <dependency>
-      <groupId>org.jsoup</groupId>
-      <artifactId>jsoup</artifactId>
-      <version>1.7.2</version>
-    </dependency>
- ```
+6. pom文件依赖如下
+    ```
+        <dependency>
+          <groupId>org.seleniumhq.selenium</groupId>
+          <artifactId>selenium-server</artifactId>
+          <version>3.0.1</version>
+        </dependency>
+        <!-- https://mvnrepository.com/artifact/org.jsoup/jsoup -->
+        <dependency>
+          <groupId>org.jsoup</groupId>
+          <artifactId>jsoup</artifactId>
+          <version>1.7.2</version>
+        </dependency>
+     ```
  
- ## 最后
- 1. github地址:https://github.com/wycm/selenium-geetest-crack
- 2. 附上一张滑动效果图<br>
+## 最后
+1. github地址:https://github.com/wycm/selenium-geetest-crack
+2. 附上一张滑动效果图<br>
  ![](http://images2017.cnblogs.com/blog/1133483/201708/1133483-20170815001340959-459369673.gif)

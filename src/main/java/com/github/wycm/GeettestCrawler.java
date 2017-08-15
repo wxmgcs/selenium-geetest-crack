@@ -39,9 +39,9 @@ public class GeettestCrawler {
     private static WebDriver driver;
 
     static {
-        System.setProperty("webdriver.chrome.driver", "/Users/wangyang/workspace/selenium/chromedriver_V2.30/chromedriver");
-        if (System.getProperty("os.name").toLowerCase().contains("windows")){
-            System.setProperty("webdriver.chrome.driver", "D:\\dev\\selenium\\chromedriver_V2.30\\chromedriver_win32\\chromedriver.exe");
+        System.setProperty("webdriver.chrome.driver", "D:/dev/selenium/chromedriver_V2.30/chromedriver_win32/chromedriver.exe");
+        if (!System.getProperty("os.name").toLowerCase().contains("windows")){
+            System.setProperty("webdriver.chrome.driver", "/Users/wangyang/workspace/selenium/chromedriver_V2.30/chromedriver");
         }
         driver = new ChromeDriver();
     }
