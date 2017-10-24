@@ -61,19 +61,13 @@ public class GeettestCrawler {
     }
     private static void invoke() throws IOException, InterruptedException {
         //设置input参数
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                driver.get(INDEX_URL);
-            }
-        }).start();
-        Thread.sleep(10000);
+        driver.get(INDEX_URL);
         By searchInput = By.id("keyword");
 //        waitForLoad(driver, searchInput);
         WebElement searchInputEel = driver.findElement(searchInput);
         searchInputEel.sendKeys("微信");
 
-        new Actions(driver).click(driver.findElement(By.id("btn_query")));
+        new Actions(driver).click(driver.findElement(By.id("btn_query"))).perform();
 
         //通过[class=gt_slider_knob gt_show]
         By moveBtn = By.cssSelector(".gt_slider_knob.gt_show");
