@@ -511,6 +511,6 @@
      ```
  
 ## 最后
-1. github地址:https://github.com/wycm/selenium-geetest-crack
+1. 完整代码已上传至github,地址:https://github.com/wycm/selenium-geetest-crack
 2. 附上一张滑动效果图<br>
  ![](http://images2017.cnblogs.com/blog/1133483/201708/1133483-20170815001340959-459369673.gif)

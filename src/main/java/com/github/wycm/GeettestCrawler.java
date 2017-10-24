@@ -35,7 +35,8 @@ public class GeettestCrawler {
     private static String BG_IMAGE_NAME = "bg-image";
     private static int[][] moveArray = new int[52][2];
     private static boolean moveArrayInit = false;
-    private static String INDEX_URL = "https://passport.feng.com/?r=user/register";
+//    private static String INDEX_URL = "https://passport.feng.com/?r=user/register";
+    private static String INDEX_URL = "http://www.gsxt.gov.cn/index.html";
     private static WebDriver driver;
 
     static {
@@ -60,7 +61,19 @@ public class GeettestCrawler {
     }
     private static void invoke() throws IOException, InterruptedException {
         //设置input参数
-        driver.get(INDEX_URL);
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                driver.get(INDEX_URL);
+            }
+        }).start();
+        Thread.sleep(10000);
+        By searchInput = By.id("keyword");
+//        waitForLoad(driver, searchInput);
+        WebElement searchInputEel = driver.findElement(searchInput);
+        searchInputEel.sendKeys("微信");
+
+        new Actions(driver).click(driver.findElement(By.id("btn_query")));
 
         //通过[class=gt_slider_knob gt_show]
         By moveBtn = By.cssSelector(".gt_slider_knob.gt_show");
