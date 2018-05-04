@@ -10,6 +10,7 @@ import org.openqa.selenium.Point;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.interactions.Action;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.ExpectedCondition;
 import org.openqa.selenium.support.ui.WebDriverWait;
@@ -35,14 +36,15 @@ public class GeettestCrawler {
     private static String BG_IMAGE_NAME = "bg-image";
     private static int[][] moveArray = new int[52][2];
     private static boolean moveArrayInit = false;
-    private static String INDEX_URL = "https://passport.feng.com/?r=user/register";
+//    private static String INDEX_URL = "https://passport.feng.com/?r=user/register";
+    private static String INDEX_URL = "https://passport.bilibili.com/login";
     private static WebDriver driver;
 
     static {
-        System.setProperty("webdriver.chrome.driver", "D:/dev/selenium/chromedriver_V2.30/chromedriver_win32/chromedriver.exe");
-        if (!System.getProperty("os.name").toLowerCase().contains("windows")){
-            System.setProperty("webdriver.chrome.driver", "/Users/wangyang/workspace/selenium/chromedriver_V2.30/chromedriver");
-        }
+        System.setProperty("webdriver.chrome.driver", "/Users/diyai/Selenium/chromedriver2.35");
+//        if (!System.getProperty("os.name").toLowerCase().contains("windows")){
+//            System.setProperty("webdriver.chrome.driver", "/Users/wangyang/workspace/selenium/chromedriver_V2.30/chromedriver");
+//        }
         driver = new ChromeDriver();
     }
 
@@ -98,32 +100,61 @@ public class GeettestCrawler {
      * @throws InterruptedException
      */
     public static void move(WebDriver driver, WebElement element, int distance) throws InterruptedException {
-        int xDis = distance + 11;
+        int baseDis = 11;
+        int xDis = distance + baseDis;
         System.out.println("应平移距离：" + xDis);
         int moveX = new Random().nextInt(8) - 5;
         int moveY = 1;
-        Actions actions = new Actions(driver);
+        Actions action = new Actions(driver);
         new Actions(driver).clickAndHold(element).perform();
         Thread.sleep(200);
         printLocation(element);
-        actions.moveToElement(element, moveX, moveY).perform();
+        action.moveToElement(element, moveX, moveY).perform();
         System.out.println(moveX + "--" + moveY);
         printLocation(element);
-        for (int i = 0; i < 22; i++){
-            int s = 10;
-            if (i % 2 == 0){
-                s = -10;
-            }
-            actions.moveToElement(element, s, 1).perform();
-//            printLocation(element);
-            Thread.sleep(new Random().nextInt(100) + 150);
-        }
+//        for (int i = 0; i < 22; i++){
+//            int s = 10;
+//            if (i % 2 == 0){
+//                s = -10;
+//            }
+////            action.moveToElement(element, s, 1);
+//            action.moveByOffset(s,0);
+////            printLocation(element);
+//            //Thread.sleep(new Random().nextInt(100) + 150);
+//            Thread.sleep(new Random().nextInt(100) + 200);
+//        }
+//            action.moveByOffset(10,0);
+//        action.clickAndHold(element).moveByOffset(10, 0);
+//        System.out.println("waiting --1");
+//        action.clickAndHold(element).moveByOffset(10, 0);
+//        System.out.println("waiting --2");
+//        action.clickAndHold(element).moveByOffset(10, 0);
 
         System.out.println(xDis + "--" + 1);
-        actions.moveByOffset(xDis, 1).perform();
+//        for(int i = 0 ;i < 5;i++){
+//            action.moveByOffset(xDis/5, 1);
+//            Thread.sleep(new Random().nextInt(100) + 150);
+//        }
+//        action.moveByOffset(xDis, 1);
+//        action.moveByOffset(xDis/5, 1);
+
+        // 先快后慢算法
+        long d1 = Math.round(xDis*0.7);
+        long d2 = Math.round(xDis*0.2);
+        long d3 = Math.round(xDis*0.1);
+        action.moveByOffset((int)d1, 1);
+        Thread.sleep(new Random().nextInt(100) + 150);
+        action.moveByOffset((int)d2, 1);
+        Thread.sleep(new Random().nextInt(100) + 150);
+        action.moveByOffset((int)d3, 1);
+        action.moveByOffset(baseDis, 1);
+
         printLocation(element);
-        Thread.sleep(200);
-        actions.release(element).perform();
+        Thread.sleep(2000);
+        action.release(element);
+
+        Action actions = action.build();
+        actions.perform();
     }
     private static void printLocation(WebElement element){
         Point point  = element.getLocation();
